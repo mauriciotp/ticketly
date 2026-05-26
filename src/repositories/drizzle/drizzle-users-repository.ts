@@ -10,6 +10,12 @@ export class DrizzleUsersRepository implements UsersRepository {
     return user
   }
 
+  async findById(id: string): Promise<User | null> {
+    const [user] = await db.select().from(users).where(eq(users.id, id))
+
+    return user
+  }
+
   async create(data: NewUser): Promise<User> {
     const [user] = await db.insert(users).values(data).returning()
 
