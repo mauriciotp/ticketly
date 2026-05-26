@@ -13,7 +13,6 @@
     "@elysia/jwt": "^1.4.2",
     "@elysia/openapi": "^1.4.15",
     "drizzle-orm": "^1.0.0-beta.22",
-    "drizzle-zod": "^0.8.3",
     "elysia": "latest",
     "zod": "^4.4.3"
   },

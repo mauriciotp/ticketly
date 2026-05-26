@@ -1,12 +1,13 @@
-import z from 'zod'
+import { t } from 'elysia'
+import type z from 'zod'
 
 export const UsersModel = {
-  getProfileResponse: z.object({
-    user: z.object({
-      id: z.uuidv7(),
-      name: z.string(),
-      email: z.email(),
-      createdAt: z.iso.datetime(),
+  getProfileResponse: t.Object({
+    user: t.Object({
+      id: t.String({ format: 'uuid' }),
+      name: t.String(),
+      email: t.String({ format: 'email' }),
+      createdAt: t.String({ format: 'date-time' }),
     }),
   }),
 }

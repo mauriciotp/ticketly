@@ -1,20 +1,18 @@
-import z from 'zod'
+import { t, type UnwrapSchema } from 'elysia'
 
 export const AuthModel = {
-  signUpBody: z.object({
-    name: z.string(),
-    email: z.email(),
-    password: z
-      .string()
-      .min(8, 'Your password needs to be at least 8 characters'),
-    role: z.enum(['attendee', 'organizer']).optional(),
+  signUpBody: t.Object({
+    name: t.String(),
+    email: t.String({ format: 'email' }),
+    password: t.String({ minLength: 8 }),
+    role: t.Optional(t.UnionEnum(['attendee', 'organizer'])),
   }),
-  signInBody: z.object({
-    email: z.email(),
-    password: z.string(),
+  signInBody: t.Object({
+    email: t.String({ format: 'email' }),
+    password: t.String(),
   }),
 }
 
 export type AuthModel = {
-  [k in keyof typeof AuthModel]: z.infer<(typeof AuthModel)[k]>
+  [k in keyof typeof AuthModel]: UnwrapSchema<(typeof AuthModel)[k]>
 }
