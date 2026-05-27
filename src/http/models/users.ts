@@ -1,5 +1,4 @@
 import { t } from 'elysia'
-import type z from 'zod'
 
 export const UsersModel = {
   getProfileResponse: t.Object({
@@ -7,11 +6,8 @@ export const UsersModel = {
       id: t.String({ format: 'uuid' }),
       name: t.String(),
       email: t.String({ format: 'email' }),
+      role: t.UnionEnum(['attendee', 'organizer']),
       createdAt: t.String({ format: 'date-time' }),
     }),
   }),
-}
-
-export type UsersModel = {
-  [k in keyof typeof UsersModel]: z.infer<(typeof UsersModel)[k]>
 }

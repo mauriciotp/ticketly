@@ -9,32 +9,46 @@ const tokenPayloadSchema = t.Object({
 
 type TokenPayload = UnwrapSchema<typeof tokenPayloadSchema>
 
-export const checkAuth = new Elysia({ name: 'checkAuth' })
-  .use(
-    jwt({
-      secret: env.JWT_SECRET,
-      schema: tokenPayloadSchema,
-    }),
-  )
-  .guard({
-    headers: t.Object({
-      authorization: t.String({ pattern: '^Bearer .+' }),
-    }),
-  })
-  .resolve(async ({ headers: { authorization }, jwt }) => {
-    const token = authorization.split('Bearer ')[1]
+type Roles = 'attendee' | 'organizer'
 
-    const user: TokenPayload = await jwt.verify(token)
+export const checkAuth = (...roles: Roles[]) => {
+  return new Elysia({ name: 'checkAuth' })
+    .use(
+      jwt({
+        secret: env.JWT_SECRET,
+        schema: tokenPayloadSchema,
+      }),
+    )
+    .guard({
+      headers: t.Object({
+        authorization: t.String({ pattern: '^Bearer .+' }),
+      }),
+    })
+    .resolve(async ({ headers: { authorization }, jwt }) => {
+      const token = authorization.split('Bearer ')[1]
 
-    if (!user) {
-      throw status('Unauthorized', { message: 'Unauthorized' })
-    }
+      const payload: TokenPayload = await jwt.verify(token)
 
-    return {
-      user: {
-        userId: user.sub,
-        role: user.role,
-      },
-    }
-  })
-  .as('scoped')
+      if (!payload) {
+        throw status('Unauthorized', { message: 'Unauthorized' })
+      }
+
+      const allowedRoles = new Set(roles)
+
+      if (
+        allowedRoles.size > 0 &&
+        payload.role &&
+        !allowedRoles.has(payload.role)
+      ) {
+        throw status('Forbidden', { message: 'Forbidden' })
+      }
+
+      return {
+        user: {
+          userId: payload.sub,
+          role: payload.role,
+        },
+      }
+    })
+    .as('scoped')
+}

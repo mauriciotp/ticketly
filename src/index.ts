@@ -2,6 +2,7 @@ import openapi from '@elysia/openapi'
 import { Elysia } from 'elysia'
 import { env } from './env'
 import { auth } from './http/routes/auth'
+import { events } from './http/routes/events'
 import { users } from './http/routes/users'
 
 const app = new Elysia()
@@ -35,6 +36,7 @@ const app = new Elysia()
   )
   .use(auth)
   .use(users)
+  .use(events)
   .listen({ port: env.PORT })
 
 console.log(

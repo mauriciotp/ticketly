@@ -16,3 +16,6 @@ export const events = pgTable('events', {
   priceInCents: integer('price_in_cents').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 })
+
+export type NewEvent = typeof events.$inferInsert
+export type Event = typeof events.$inferSelect

@@ -3,7 +3,7 @@ import { UsersModel } from '@/http/models/users'
 import { checkAuth } from '@/http/plugins/check-auth'
 import { makeGetProfileUseCase } from '@/use-cases/@factories/make-get-profile-use-case'
 
-export const getProfile = new Elysia().use(checkAuth).get(
+export const getProfile = new Elysia().use(checkAuth()).get(
   '/me',
   async ({ user: { userId } }) => {
     const getProfileUseCase = makeGetProfileUseCase()
@@ -17,6 +17,7 @@ export const getProfile = new Elysia().use(checkAuth).get(
         id: user.id,
         name: user.name,
         email: user.email,
+        role: user.role,
         createdAt: user.createdAt.toISOString(),
       },
     })

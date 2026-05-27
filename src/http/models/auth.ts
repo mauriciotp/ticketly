@@ -1,4 +1,4 @@
-import { t, type UnwrapSchema } from 'elysia'
+import { t } from 'elysia'
 
 export const AuthModel = {
   signUpBody: t.Object({
@@ -11,8 +11,4 @@ export const AuthModel = {
     email: t.String({ format: 'email' }),
     password: t.String(),
   }),
-}
-
-export type AuthModel = {
-  [k in keyof typeof AuthModel]: UnwrapSchema<(typeof AuthModel)[k]>
 }
