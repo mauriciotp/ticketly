@@ -8,4 +8,30 @@ export const EventsModel = {
     capacity: t.Integer({ minimum: 0 }),
     date: t.Date(),
   }),
+  listEventsQuery: t.Object({
+    cursor: t.Optional(t.String({ format: 'uuid' })),
+    pageSize: t.Optional(t.Integer()),
+  }),
+  listEventsResponse: t.Object({
+    events: t.Object({
+      data: t.Array(
+        t.Object({
+          id: t.String({ format: 'uuid' }),
+          organizerId: t.String({ format: 'uuid' }),
+          title: t.String(),
+          description: t.Nullable(t.String()),
+          date: t.Date(),
+          capacity: t.Integer(),
+          ticketsSold: t.Integer(),
+          priceInCents: t.Integer(),
+          createdAt: t.Date(),
+        }),
+      ),
+      meta: t.Object({
+        hasMore: t.Boolean(),
+        limit: t.Integer(),
+        nextCursor: t.Nullable(t.String({ format: 'uuid' })),
+      }),
+    }),
+  }),
 }
