@@ -6,4 +6,8 @@ export interface EventsRepository {
   create(data: NewEvent): Promise<Event>
   findById(id: string): Promise<Event | null>
   findMany(params: PaginationParams): Promise<PaginationResponse<Event>>
+  findManyByOrganizerId(
+    id: string,
+    params: PaginationParams,
+  ): Promise<PaginationResponse<Event>>
 }

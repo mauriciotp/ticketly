@@ -1,4 +1,4 @@
-import { asc, eq, gt } from 'drizzle-orm'
+import { and, asc, eq, gt } from 'drizzle-orm'
 import { db } from '@/db/client'
 import { type Event, events as eventsTable, type NewEvent } from '@/db/schemas'
 import type { PaginationParams } from '../@types/pagination-params'
@@ -29,6 +29,36 @@ export class DrizzleEventsRepository implements EventsRepository {
     const hasMore = events.length > pageSize
     const data = hasMore ? events.slice(0, pageSize) : events
     const nextCursor = hasMore ? data[data.length - 1].id : null
+
+    return {
+      data,
+      meta: {
+        hasMore,
+        limit: pageSize,
+        nextCursor,
+      },
+    }
+  }
+
+  async findManyByOrganizerId(
+    id: string,
+    { cursor, pageSize = 15 }: PaginationParams,
+  ): Promise<PaginationResponse<Event>> {
+    const events = await db
+      .select()
+      .from(eventsTable)
+      .where(
+        and(
+          eq(eventsTable.organizerId, id),
+          cursor ? gt(eventsTable.id, cursor) : undefined,
+        ),
+      )
+      .limit(pageSize + 1)
+      .orderBy(asc(eventsTable.id))
+
+    const hasMore = events.length > pageSize
+    const data = hasMore ? events.slice(0, pageSize) : events
+    const nextCursor = hasMore ? events[events.length - 1].id : null
 
     return {
       data,

@@ -12,6 +12,9 @@ export const EventsModel = {
     cursor: t.Optional(t.String({ format: 'uuid' })),
     pageSize: t.Optional(t.Integer()),
   }),
+  listEventsByOrganizerParams: t.Object({
+    organizerId: t.String({ format: 'uuid' }),
+  }),
   listEventsResponse: t.Object({
     events: t.Object({
       data: t.Array(
