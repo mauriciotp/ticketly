@@ -19,3 +19,4 @@ export const events = pgTable('events', {
 
 export type NewEvent = typeof events.$inferInsert
 export type Event = typeof events.$inferSelect
+export type UpdateEvent = Partial<typeof events.$inferInsert>

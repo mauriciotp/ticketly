@@ -1,6 +1,11 @@
 import { and, asc, eq, gt } from 'drizzle-orm'
 import { db } from '@/db/client'
-import { type Event, events as eventsTable, type NewEvent } from '@/db/schemas'
+import {
+  type Event,
+  events as eventsTable,
+  type NewEvent,
+  type UpdateEvent,
+} from '@/db/schemas'
 import type { PaginationParams } from '../@types/pagination-params'
 import type { PaginationResponse } from '../@types/pagination-response'
 import type { EventsRepository } from '../events-repository'
@@ -72,6 +77,16 @@ export class DrizzleEventsRepository implements EventsRepository {
 
   async create(data: NewEvent): Promise<Event> {
     const event = await db.insert(eventsTable).values(data)
+
+    return event
+  }
+
+  async update(id: string, data: UpdateEvent): Promise<Event> {
+    const [event] = await db
+      .update(eventsTable)
+      .set(data)
+      .where(eq(eventsTable.id, id))
+      .returning()
 
     return event
   }

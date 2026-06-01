@@ -37,4 +37,14 @@ export const EventsModel = {
       }),
     }),
   }),
+  editEventBody: t.Object({
+    title: t.Optional(t.String()),
+    description: t.Optional(t.String()),
+    date: t.Optional(t.Date()),
+    priceInCents: t.Optional(t.Integer()),
+    capacity: t.Optional(t.Integer()),
+  }),
+  editEventParams: t.Object({
+    eventId: t.String({ format: 'uuid' }),
+  }),
 }

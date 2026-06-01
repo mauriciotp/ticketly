@@ -1,4 +1,4 @@
-import type { Event, NewEvent } from '@/db/schemas'
+import type { Event, NewEvent, UpdateEvent } from '@/db/schemas'
 import type { PaginationParams } from './@types/pagination-params'
 import type { PaginationResponse } from './@types/pagination-response'
 
@@ -10,4 +10,5 @@ export interface EventsRepository {
     id: string,
     params: PaginationParams,
   ): Promise<PaginationResponse<Event>>
+  update(id: string, data: UpdateEvent): Promise<Event>
 }
