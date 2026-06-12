@@ -1,11 +1,13 @@
 import openapi from '@elysia/openapi'
 import { Elysia } from 'elysia'
 import { env } from './env'
+import { errorHandler } from './error-handler'
 import { auth } from './http/routes/auth'
 import { events } from './http/routes/events'
 import { users } from './http/routes/users'
 
 const app = new Elysia()
+  .use(errorHandler)
   .use(
     openapi({
       documentation: {
